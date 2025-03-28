@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022-2023 The LineageOS Project
+// Copyright (C) 2022-2025 The LineageOS Project
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -225,6 +225,13 @@ cc_library_shared {
 }
 
 cc_library_shared {
+    name: "android.hardware.sensors@1.0-convert-shared",
+    shared_libs: ["libhidlbase"],
+    whole_static_libs: ["android.hardware.sensors@1.0-convert"],
+    vendor_available: true,
+}
+
+cc_library_shared {
     name: "android.hidl.base@1.0",
     shared_libs: ["libhidlbase"],
     system_ext_specific: true,
@@ -236,6 +243,12 @@ cc_library_shared {
     shared_libs: ["libhidlbase"],
     system_ext_specific: true,
     vendor_available: true,
+}
+
+cc_library_shared {
+    name: "libaudioproxy_shim",
+    srcs: ["libaudioproxy/libaudioproxy_shim.cpp"],
+    proprietary: true,
 }
 
 cc_library_shared {
@@ -251,6 +264,13 @@ cc_defaults {
         "libgui/GraphicBufferProducer.cpp",
         "libgui/SurfaceComposerClient.cpp",
     ],
+}
+
+cc_library_shared {
+    name: "libaudioclient_shim",
+    shared_libs: ["libaudioclient", "libutils", "liblog"],
+    header_libs: ["libmedia_headers"],
+    srcs: ["libaudioclient/AudioTrack.cpp"],
 }
 
 cc_library {
@@ -391,6 +411,25 @@ cc_library {
     vendor_available: true,
 }
 
+cc_prebuilt_library_shared {
+    name: "libcutils-v29",
+    system_ext_specific: true,
+    vendor_available: true,
+    strip: {
+        none: true,
+    },
+    target: {
+        android_arm: {
+            srcs: ["vndk/v29/arm/libcutils-v29.so"],
+        },
+        android_arm64: {
+            srcs: ["vndk/v29/arm64/libcutils-v29.so"],
+        },
+    },
+    compile_multilib: "both",
+    check_elf_files: false,
+}
+
 cc_library {
     name: "libcutils_shim",
     shared_libs: [
@@ -401,6 +440,14 @@ cc_library {
         "libcutils/strdup8to16.cpp",
     ],
     vendor_available: true,
+}
+
+cc_library {
+    name: "libdemangle",
+    vendor_available: true,
+    whole_static_libs: [
+        "libc++demangle",
+    ]
 }
 
 cc_library {
@@ -420,6 +467,7 @@ cc_library {
 cc_prebuilt_library_shared {
     name: "libhidlbase-v32",
     system_ext_specific: true,
+    recovery_available: true,
     vendor_available: true,
     strip: {
         none: true,
@@ -543,9 +591,29 @@ cc_prebuilt_library_shared {
     target: {
         android_arm: {
             srcs: ["vndk/v32/arm/libutils-v32.so"],
+            shared_libs: ["libprocessgroup_shim"],
         },
         android_arm64: {
             srcs: ["vndk/v32/arm64/libutils-v32.so"],
+            shared_libs: ["libprocessgroup_shim"],
+        },
+    },
+    compile_multilib: "both",
+    check_elf_files: false,
+}
+
+cc_prebuilt_library_shared {
+    name: "libutils-v33",
+    vendor: true,
+    strip: {
+        none: true,
+    },
+    target: {
+        android_arm: {
+            srcs: ["vndk/v33/arm/libutils-v33.so"],
+        },
+        android_arm64: {
+            srcs: ["vndk/v33/arm64/libutils-v33.so"],
         },
     },
     compile_multilib: "both",
@@ -566,6 +634,25 @@ cc_library {
         "libip_checksum",
     ],
     vendor_available: true,
+}
+
+cc_library {
+    name: "libnativehelper_shim",
+    version_script: "libnativehelper/libnativehelper.map",
+    srcs: [
+        "libnativehelper/libnativehelper.cpp",
+    ],
+}
+
+cc_library_shared {
+    name: "libprocessgroup_shim",
+    srcs: [
+        "libprocessgroup/processgroup.cpp",
+    ],
+    shared_libs: [
+        "libprocessgroup",
+    ],
+    vendor: true,
 }
 
 cc_library_shared {
