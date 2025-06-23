@@ -13,7 +13,7 @@ std::string kEmpty;
 
 sp<IBinder> createDisplay(const android::String8& displayName, bool isSecure,
                           float requestedRefreshRate) {
-    return createVirtualDisplay(displayName.c_str(), isSecure, kEmpty, requestedRefreshRate);
+    return createVirtualDisplay(displayName.c_str(), isSecure, true, kEmpty, requestedRefreshRate);
 }
 
 status_t destroyDisplay(const sp<IBinder>& displayToken) {

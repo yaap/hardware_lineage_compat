@@ -10,7 +10,8 @@ namespace android {
 namespace SurfaceComposerClient {
 
 sp<IBinder> createVirtualDisplay(const std::string& displayName, bool isSecure,
-                                 const std::string& uniqueId, float requestedRefreshRate);
+                                 bool optimizeForPower, const std::string& uniqueId,
+                                 float requestedRefreshRate);
 sp<IBinder> createDisplay(const android::String8& displayName, bool isSecure,
                           float requestedRefreshRate);
 
